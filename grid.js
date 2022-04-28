@@ -1,4 +1,5 @@
 class Grid {
+    sortOption = 1;
     constructor(width, height, size) {
         this.cells = [];
         this.width = width;
@@ -7,12 +8,18 @@ class Grid {
         this.options = [];
     }
 
-    random = (items) => {
+    sortAscending() { this.sortOption = 1; }
+
+    sortDescending() { this.sortOption = 2; }
+
+    doNotSort() { this.sortOption = -1; }
+
+    random(items) {
         const rnd = Math.floor(Math.random() * items.length);
         return items[rnd];
     }
 
-    arrayMatches = (array1, array2) => {
+    arrayMatches(array1, array2) {
         const result = [];
         for (let i = 0; i < array1.length; i++) {
             for (let j = 0; j < array2.length; j++) {
@@ -39,9 +46,9 @@ class Grid {
             element.x = column;
             element.y = row;
             element.x1 = column * this.size;
-            element.x2 = (column + 1) * this.size;
+            element.x2 = element.x1 + this.size;
             element.y1 = row * this.size;
-            element.y2 = (row + 1) * this.size;
+            element.y2 = element.y1 + this.size;
 
             column++;
             if (column >= dimensions) {
@@ -79,8 +86,8 @@ class Grid {
         }
     }
 
-    setRandomCell(pickRandomItem, reverseSort) {
-        const copy = this.cells.filter(x => !x.isCollapsed).slice();
+    setRandomCell(pickRandomItem) {
+        const copy = this.cells.filter(x => !x.isCollapsed);
 
         if (copy.length === 0) {
             return;
@@ -90,7 +97,10 @@ class Grid {
             noLoop();
         }
 
-        copy.sort((a, b) => { return !reverseSort ? a.options.length - b.options.length : b.options.length - a.options.length });
+        if (this.sortOption === 1) { copy.sort((a, b) => { return a.options.length - b.options.length }); }
+        else if (this.sortOption === 2) { copy.sort((a, b) => { return b.options.length - a.options.length }); }
+        else { /* no sorting */ }
+
         let len = copy[0].options.length;
         let stopIndex = copy.findIndex(x => x.options.length > len);
 

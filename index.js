@@ -10,7 +10,7 @@ var sketch = (() => {
 
     const pickRandomItem = false;
     const islandModeOn = tileSet.supportsIslandMode && true;
-    const emptyCenter = false;
+    const emptyCenter = true;
     const reverseSort = false;
 
     preload = () => {
@@ -26,6 +26,8 @@ var sketch = (() => {
         tileSet.analyze();
 
         grid.initialize(tileSet.tiles.map(x => x.index));
+        grid.doNotSort();
+
         if (emptyCenter) {
             grid.setEmptyCenter();
         }
@@ -52,7 +54,6 @@ var sketch = (() => {
     }
 
     draw = async () => {
-        //return;
         background(151);
         if (setRandomItem) {
             grid.setRandomCell(pickRandomItem, reverseSort);

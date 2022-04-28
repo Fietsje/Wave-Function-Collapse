@@ -129,22 +129,6 @@ class TileSet {
         const cornerTop = 5;
         const cornerLeft = 6;
 
-        // const set = [
-        //     new Tile('circuit/1', [darkgreen, darkgreen, darkgreen, darkgreen]),
-        //     new Tile('circuit/0', [blank, blank, blank, blank]),
-        //     new Tile('circuit/2', [darkgreen, lightgreen, darkgreen, darkgreen], 3),
-        //     new Tile('circuit/3', [darkgreen, grey, darkgreen, grey], 1),
-        //     new Tile('circuit/4', [darkgreen, lightgreen, darkgreen, blank], 3),
-        //     new Tile('circuit/5', [cornerTop, darkgreen, darkgreen, cornerLeft], 3),
-        //     new Tile('circuit/6', [darkgreen, lightgreen, darkgreen, lightgreen], 1),
-        //     new Tile('circuit/7', [grey, lightgreen, grey, lightgreen], 1),
-        //     new Tile('circuit/8', [grey, darkgreen, lightgreen, darkgreen], 3),
-        //     new Tile('circuit/9', [lightgreen, lightgreen, darkgreen, lightgreen], 3),
-        //     new Tile('circuit/10', [lightgreen, lightgreen, lightgreen, lightgreen], 3),
-        //     new Tile('circuit/11', [lightgreen, lightgreen, darkgreen, darkgreen], 3),
-        //     new Tile('circuit/12', [darkgreen, lightgreen, darkgreen, lightgreen], 1),
-        // ];
-
         const set = [
             new Tile('circuit/1', ["BBB", "BBB", "BBB", "BBB"]),
             new Tile('circuit/0', ["AAA", "AAA", "AAA", "AAA"]),
@@ -168,16 +152,7 @@ class TileSet {
 
         const result = new TileSet(set);
         result.supportsIslandMode = true;
-        result.adjust = () => {
-            // Generate the adjacency rules based on edges
-            for (let i = 0; i < result.tiles.length; i++) {
-                const tile = result.tiles[i];
-                tile.analyze(result.tiles);
-            }
-            // for (let index = 0; index < result.tiles.length; index++) {
-            //     const element = result.tiles[index];
-            // }
-        };
+        result.adjust = () => { /* nothing yet */ };
         return result;
     }
 

@@ -40,16 +40,13 @@ class Cell {
 
     async checkLeft(grid, islandMode, tiles) {
         const currentOptions = this.options;
-        //const options = tiles.map(x => x.index);
 
         return new Promise((resolve) => {
-            let selection = this.left; //grid.find(item => item.x == this.x - 1 && item.y === this.y);
+            let selection = this.left;
             if (!selection && islandMode) { selection = new Cell([0]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
-                    // const node = tiles[cur].nodes[Cell.RIGHT];
-                    //const availableTiles = tiles.filter(x => Tile.compare(x, Cell.LEFT, node)).map(x => x.index);
                     const node = tiles[cur];
                     const availableTiles = node.right;
                     for (let i = 0; i < availableTiles.length; i++) {
@@ -58,13 +55,6 @@ class Cell {
                     return prev;
                 }, []);
                 resolve(newOptions);
-                // let validOptions = [];
-                // for (let option of selection.options) {
-                //     let valid = tiles[option].right;
-                //     validOptions = validOptions.concat(valid);
-                // }
-                // this.checkValid(options, validOptions);
-                // resolve(validOptions);
             }
             else {
                 resolve(currentOptions);
@@ -74,19 +64,13 @@ class Cell {
 
     async checkRight(grid, islandMode, tiles) {
         const currentOptions = this.options;
-        //const options = tiles.map(x => x.index);
 
         return new Promise((resolve) => {
-            let selection = this.right; //grid.find(item => item.x == this.x + 1 && item.y === this.y);
+            let selection = this.right;
             if (!selection && islandMode) { selection = new Cell([0]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
-                    if (!tiles[cur]) {
-                        console.log(Cell.LEFT, cur, tiles);
-                    }
-                    // const node = tiles[cur].nodes[Cell.RIGHT];
-                    //const availableTiles = tiles.filter(x => Tile.compare(x, Cell.LEFT, node)).map(x => x.index);
                     const node = tiles[cur];
                     const availableTiles = node.left;
                     for (let i = 0; i < availableTiles.length; i++) {
@@ -95,13 +79,6 @@ class Cell {
                     return prev;
                 }, []);
                 resolve(newOptions);
-                // let validOptions = [];
-                // for (let option of selection.options) {
-                //     let valid = tiles[option].left;
-                //     validOptions = validOptions.concat(valid);
-                // }
-                // this.checkValid(options, validOptions);
-                // resolve(validOptions);
             }
             else {
                 resolve(currentOptions);
@@ -111,16 +88,13 @@ class Cell {
 
     async checkTop(grid, islandMode, tiles) {
         const currentOptions = this.options;
-        //const options = tiles.map(x => x.index);
 
         return new Promise((resolve) => {
-            let selection = this.up; //grid.find(item => item.x === this.x && item.y == this.y - 1);
+            let selection = this.up;
             if (!selection && islandMode) { selection = new Cell([0]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
-                    // const node = tiles[cur].nodes[Cell.RIGHT];
-                    //const availableTiles = tiles.filter(x => Tile.compare(x, Cell.LEFT, node)).map(x => x.index);
                     const node = tiles[cur];
                     const availableTiles = node.down;
                     for (let i = 0; i < availableTiles.length; i++) {
@@ -129,13 +103,6 @@ class Cell {
                     return prev;
                 }, []);
                 resolve(newOptions);
-                // let validOptions = [];
-                // for (let option of selection.options) {
-                //     let valid = tiles[option].down;
-                //     validOptions = validOptions.concat(valid);
-                // }
-                // this.checkValid(options, validOptions);
-                // resolve(validOptions);
             }
             else {
                 resolve(currentOptions);
@@ -145,16 +112,13 @@ class Cell {
 
     async checkBottom(grid, islandMode, tiles) {
         const currentOptions = this.options;
-        //const options = tiles.map(x => x.index);
 
         return new Promise((resolve) => {
-            let selection = this.down; //grid.find(item => item.x === this.x && item.y == this.y + 1);
+            let selection = this.down;
             if (!selection && islandMode) { selection = new Cell([0]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
-                    // const node = tiles[cur].nodes[Cell.RIGHT];
-                    //const availableTiles = tiles.filter(x => Tile.compare(x, Cell.LEFT, node)).map(x => x.index);
                     const node = tiles[cur];
                     const availableTiles = node.up;
                     for (let i = 0; i < availableTiles.length; i++) {
@@ -163,13 +127,6 @@ class Cell {
                     return prev;
                 }, []);
                 resolve(newOptions);
-                // let validOptions = [];
-                // for (let option of selection.options) {
-                //     let valid = tiles[option].up;
-                //     validOptions = validOptions.concat(valid);
-                // }
-                // this.checkValid(options, validOptions);
-                // resolve(validOptions);
             }
             else {
                 resolve(currentOptions);
