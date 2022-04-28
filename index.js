@@ -9,7 +9,7 @@ var sketch = (() => {
     const tileSet = TileSet.circuit();
 
     const pickRandomItem = false;
-    const islandModeOn = tileSet.supportsIslandMode && true;
+    const settingABorder = tileSet.supportsSettingBorder && true;
     const emptyCenter = true;
     const reverseSort = false;
 
@@ -25,11 +25,11 @@ var sketch = (() => {
         tileSet.adjust();
         tileSet.analyze();
 
-        grid.initialize(tileSet.tiles.map(x => x.index));
+        grid.initialize(tileSet);
         grid.doNotSort();
 
         if (emptyCenter) {
-            grid.setEmptyCenter();
+            grid.setEmptyCenter(tileSet.centerOption, tileSet.recommendedEmptyCenterAreaFactor);
         }
 
         createCanvas(width, height);
@@ -74,6 +74,6 @@ var sketch = (() => {
             }
         }
 
-        await grid.checkCells(tileSet, islandModeOn);
+        await grid.checkCells(tileSet, settingABorder);
     }
 })(new p5(sketch, 'canvas'));

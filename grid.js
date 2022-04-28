@@ -1,5 +1,7 @@
 class Grid {
     sortOption = 1;
+    tileSetData = null;
+
     constructor(width, height, size) {
         this.cells = [];
         this.width = width;
@@ -34,8 +36,9 @@ class Grid {
         return self.indexOf(value) === index;
     }
 
-    initialize(options) {
-        this.options = options;
+    initialize(tileSet) {
+        this.tileSetData = tileSet
+        this.options = tileSet.tiles.map(x => x.index);
         this.cells = Array.from({ length: (Math.ceil(this.width / this.size) * Math.ceil(this.height / this.size)) }, (e, idx) => new Cell(this.options));
         let row = 0;
         let column = 0;
@@ -71,17 +74,38 @@ class Grid {
         }
     }
 
-    setEmptyCenter() {
+    setEmptyCenter(option, factor) {
+        if (!factor) { factor = 2; }
         const linesInCenterHorizontal = Math.ceil(this.width / this.size / 2);
         const linesInCenterVertical = Math.ceil(this.height / this.size / 2);
 
+        const coordinates = {
+            factor,
+            cols: Math.ceil(this.width / this.size),
+            rows: Math.ceil(this.height / this.size),
+            linesInCenterHorizontal: Math.ceil(this.width / this.size / factor),
+            linesInCenterVertical: Math.ceil(this.height / this.size / factor),
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 0
+        };
+
+        coordinates.x1 = Math.ceil(coordinates.cols / 2 - coordinates.linesInCenterHorizontal / 2);
+        coordinates.x2 = coordinates.x1 + coordinates.linesInCenterHorizontal;
+        coordinates.y1 = Math.ceil(coordinates.rows / 2 - coordinates.linesInCenterVertical / 2);
+        coordinates.y2 = coordinates.y1 + coordinates.linesInCenterVertical;
+
+        console.log('coordinates', coordinates, linesInCenterHorizontal, linesInCenterVertical);
+
         const blanks = this.cells.filter(x =>
-            (x.x + 1) >= linesInCenterHorizontal / 2 && (x.x + 1) < linesInCenterHorizontal * 1.5 &&
-            (x.y + 1) >= linesInCenterVertical / 2 && (x.y + 1) < linesInCenterVertical * 1.5
+            (x.x + 1) >= coordinates.x1 && (x.x + 1) < coordinates.x2 &&
+            (x.y + 1) >= coordinates.y1 && (x.y + 1) < coordinates.y2
         );
+
         for (let index = 0; index < blanks.length; index++) {
             const element = blanks[index];
-            element.setOptions([0]);
+            element.setOptions([option || 0]);
             element.collapse();
         }
     }
@@ -113,16 +137,16 @@ class Grid {
         cell.collapse();
     }
 
-    async checkCells(tileSet, islandModeOn) {
+    async checkCells(tileSet, gridHasABorder) {
         for (let index = 0; index < this.cells.length; index++) {
             let element = this.cells[index];
             let validOptions = this.options;
 
             if (!element.collapsed) {
-                const upOptions = element.checkTop(this.cells, islandModeOn, tileSet.tiles);
-                const rightOptions = element.checkRight(this.cells, islandModeOn, tileSet.tiles);
-                const downOptions = element.checkBottom(this.cells, islandModeOn, tileSet.tiles);
-                const leftOptions = element.checkLeft(this.cells, islandModeOn, tileSet.tiles);
+                const upOptions = element.checkTop(this.cells, gridHasABorder, tileSet);
+                const rightOptions = element.checkRight(this.cells, gridHasABorder, tileSet);
+                const downOptions = element.checkBottom(this.cells, gridHasABorder, tileSet);
+                const leftOptions = element.checkLeft(this.cells, gridHasABorder, tileSet);
 
                 const allOptions = await Promise.all([upOptions, rightOptions, downOptions, leftOptions]);//
                 for (let i = 0; i < allOptions.length; i++) {

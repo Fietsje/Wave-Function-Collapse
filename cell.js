@@ -38,12 +38,13 @@ class Cell {
         }
     }
 
-    async checkLeft(grid, islandMode, tiles) {
+    async checkLeft(grid, gridHasABorder, tileSet) {
         const currentOptions = this.options;
+        const tiles = tileSet.tiles;
 
         return new Promise((resolve) => {
             let selection = this.left;
-            if (!selection && islandMode) { selection = new Cell([0]); }
+            if (!selection && gridHasABorder) { selection = new Cell([tileSet.borderOption]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
@@ -62,12 +63,13 @@ class Cell {
         });
     }
 
-    async checkRight(grid, islandMode, tiles) {
+    async checkRight(grid, gridHasABorder, tileSet) {
         const currentOptions = this.options;
+        const tiles = tileSet.tiles;
 
         return new Promise((resolve) => {
             let selection = this.right;
-            if (!selection && islandMode) { selection = new Cell([0]); }
+            if (!selection && gridHasABorder) { selection = new Cell([tileSet.borderOption]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
@@ -86,12 +88,13 @@ class Cell {
         });
     }
 
-    async checkTop(grid, islandMode, tiles) {
+    async checkTop(grid, gridHasABorder, tileSet) {
         const currentOptions = this.options;
+        const tiles = tileSet.tiles;
 
         return new Promise((resolve) => {
             let selection = this.up;
-            if (!selection && islandMode) { selection = new Cell([0]); }
+            if (!selection && gridHasABorder) { selection = new Cell([tileSet.borderOption]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {
@@ -110,12 +113,13 @@ class Cell {
         });
     }
 
-    async checkBottom(grid, islandMode, tiles) {
+    async checkBottom(grid, gridHasABorder, tileSet) {
         const currentOptions = this.options;
+        const tiles = tileSet.tiles;
 
         return new Promise((resolve) => {
             let selection = this.down;
-            if (!selection && islandMode) { selection = new Cell([0]); }
+            if (!selection && gridHasABorder) { selection = new Cell([tileSet.borderOption]); }
 
             if (selection) {
                 let newOptions = selection.options.reduce((prev, cur) => {

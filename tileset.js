@@ -15,8 +15,11 @@ class TileSet {
 
     constructor(tiles) {
         this.tiles = tiles;
-        this.supportsIslandMode = false;
+        this.supportsSettingBorder = false;
         this.adjust = () => { };
+        this.centerOption = 0;
+        this.borderOption = 0;
+        this.recommendedEmptyCenterAreaFactor = 2;
     }
 
     analyze() {
@@ -53,7 +56,7 @@ class TileSet {
         }
 
         const result = new TileSet(set);
-        result.supportsIslandMode = true;
+        result.supportsSettingBorder = true;
         return result;
     }
 
@@ -71,7 +74,7 @@ class TileSet {
         }
 
         const result = new TileSet(set);
-        result.supportsIslandMode = false;
+        result.supportsSettingBorder = false;
         return result;
     }
 
@@ -92,7 +95,7 @@ class TileSet {
         }
 
         const result = new TileSet(set);
-        result.supportsIslandMode = false;
+        result.supportsSettingBorder = false;
         return result;
     }
 
@@ -117,7 +120,7 @@ class TileSet {
         }
 
         const result = new TileSet(set);
-        result.supportsIslandMode = true;
+        result.supportsSettingBorder = true;
         return result;
     }
 
@@ -130,8 +133,8 @@ class TileSet {
         const cornerLeft = 6;
 
         const set = [
-            new Tile('circuit/1', ["BBB", "BBB", "BBB", "BBB"]),
             new Tile('circuit/0', ["AAA", "AAA", "AAA", "AAA"]),
+            new Tile('circuit/1', ["BBB", "BBB", "BBB", "BBB"]),
             new Tile('circuit/2', ["BBB", "BCB", "BBB", "BBB"], 3),
             new Tile('circuit/3', ["BBB", "BDB", "BBB", "BDB"], 1),
             new Tile('circuit/4', ["ABB", "BCB", "BBA", "AAA"], 3),
@@ -151,7 +154,10 @@ class TileSet {
         }
 
         const result = new TileSet(set);
-        result.supportsIslandMode = true;
+        result.supportsSettingBorder = true;
+        result.borderOption = 1;
+        result.centerOption = 0;
+        result.recommendedEmptyCenterAreaFactor = 4;
         result.adjust = () => { /* nothing yet */ };
         return result;
     }
