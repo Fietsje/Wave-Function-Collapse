@@ -1,6 +1,6 @@
 class Grid {
-    sortOption = 1;
     tileSetData = null;
+    sortFunction = null;
 
     constructor(width, height, size) {
         this.cells = [];
@@ -10,11 +10,11 @@ class Grid {
         this.options = [];
     }
 
-    sortAscending() { this.sortOption = 1; }
+    sortAscending() { this.sortFunction = this.sortItemsAscending; }
 
-    sortDescending() { this.sortOption = 2; }
+    sortDescending() { this.sortFunction = this.sortItemsDescending; }
 
-    doNotSort() { this.sortOption = -1; }
+    doNotSort() { this.sortFunction = null; }
 
     random(items) {
         const rnd = Math.floor(Math.random() * items.length);
@@ -96,8 +96,6 @@ class Grid {
         coordinates.y1 = Math.ceil(coordinates.rows / 2 - coordinates.linesInCenterVertical / 2);
         coordinates.y2 = coordinates.y1 + coordinates.linesInCenterVertical;
 
-        console.log('coordinates', coordinates, linesInCenterHorizontal, linesInCenterVertical);
-
         const blanks = this.cells.filter(x =>
             (x.x + 1) >= coordinates.x1 && (x.x + 1) < coordinates.x2 &&
             (x.y + 1) >= coordinates.y1 && (x.y + 1) < coordinates.y2
@@ -121,8 +119,7 @@ class Grid {
             noLoop();
         }
 
-        if (this.sortOption === 1) { copy.sort((a, b) => { return a.options.length - b.options.length }); }
-        else if (this.sortOption === 2) { copy.sort((a, b) => { return b.options.length - a.options.length }); }
+        if (this.sortFunction) { copy.sort(this.sortFunction); }
         else { /* no sorting */ }
 
         let len = copy[0].options.length;
@@ -135,18 +132,44 @@ class Grid {
         const pick = this.random(cell.options);
         cell.setOptions([pick]);
         cell.collapse();
+
+        return cell;
+    }
+
+    sortItemsAscending(a, b) {
+        if (a.options.length != b.options.length) { return a.options.length - b.options.length; }
+        else { return a.index - b.index; }
+    }
+
+    sortItemsDescending(a, b) {
+        if (a.options.length != b.options.length) { return b.options.length - a.options.length; }
+        else { return b.index - a.index; }
+    }
+
+    async checkAffectedCells(tileSet, gridHasABorder, cell) {
+        const cells = [];
+        if (cell.up) { cells.push(cell.up); }
+        if (cell.down) { cells.push(cell.down); }
+        if (cell.left) { cells.push(cell.left); }
+        if (cell.right) { cells.push(cell.right); }
+
+        await this.checkCellList(tileSet, gridHasABorder, cells);
     }
 
     async checkCells(tileSet, gridHasABorder) {
-        for (let index = 0; index < this.cells.length; index++) {
-            let element = this.cells[index];
+        await this.checkCellList(tileSet, gridHasABorder, this.cells);
+    }
+
+    async checkCellList(tileSet, gridHasABorder, cells) {
+        for (let index = 0; index < cells.length; index++) {
+            let element = cells[index];
             let validOptions = this.options;
 
             if (!element.collapsed) {
-                const upOptions = element.checkTop(this.cells, gridHasABorder, tileSet);
-                const rightOptions = element.checkRight(this.cells, gridHasABorder, tileSet);
-                const downOptions = element.checkBottom(this.cells, gridHasABorder, tileSet);
-                const leftOptions = element.checkLeft(this.cells, gridHasABorder, tileSet);
+                const upOptions = element.checkTop(cells, gridHasABorder, tileSet);
+                const rightOptions = element.checkRight(cells, gridHasABorder, tileSet);
+                const downOptions = element.checkBottom(cells, gridHasABorder, tileSet);
+                const leftOptions = element.checkLeft(cells, gridHasABorder, tileSet);
 
                 const allOptions = await Promise.all([upOptions, rightOptions, downOptions, leftOptions]);//
                 for (let i = 0; i < allOptions.length; i++) {

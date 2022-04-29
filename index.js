@@ -11,7 +11,6 @@ var sketch = (() => {
     const pickRandomItem = false;
     const settingABorder = tileSet.supportsSettingBorder && true;
     const emptyCenter = true;
-    const reverseSort = false;
 
     preload = () => {
         for (let index = 0; index < tileSet.tiles.length; index++) {
@@ -26,7 +25,7 @@ var sketch = (() => {
         tileSet.analyze();
 
         grid.initialize(tileSet);
-        grid.doNotSort();
+        grid.sortAscending();
 
         if (emptyCenter) {
             grid.setEmptyCenter(tileSet.centerOption, tileSet.recommendedEmptyCenterAreaFactor);
@@ -36,7 +35,7 @@ var sketch = (() => {
     }
 
     mousePressed = () => {
-        // const item = grid.find(item =>
+        // const item = grid.cells.find(item =>
         //     item.x1 < mouseX &&
         //     item.x2 > mouseX &&
         //     item.y1 < mouseY &&
@@ -56,8 +55,12 @@ var sketch = (() => {
     draw = async () => {
         background(151);
         if (setRandomItem) {
-            grid.setRandomCell(pickRandomItem, reverseSort);
+            const randomCell = grid.setRandomCell(pickRandomItem);
+            await grid.checkAffectedCells(tileSet, settingABorder, randomCell);
         }
+
+        await grid.checkCells(tileSet, settingABorder);
+
         setRandomItem = true;
 
         for (let index = 0; index < grid.cells.length; index++) {
@@ -74,6 +77,5 @@ var sketch = (() => {
             }
         }
 
-        await grid.checkCells(tileSet, settingABorder);
     }
 })(new p5(sketch, 'canvas'));
