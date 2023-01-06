@@ -1,4 +1,4 @@
-class Cell {
+export class Cell {
     static TOP = 0;
     static RIGHT = 1;
     static BOTTOM = 2;

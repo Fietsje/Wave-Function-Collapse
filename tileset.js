@@ -1,4 +1,6 @@
-class TileSet {
+import { Tile } from "./tile.js";
+
+export class TileSet {
     static alltiles = {
         blank: new Tile('blank', [0, 0, 0, 0]),
         down: new Tile('down', [0, 1, 1, 1]),
@@ -29,12 +31,12 @@ class TileSet {
         }
     }
 
-    rotateTiles() {
+    rotateTiles(p5) {
         for (let index = 0; index < this.tiles.length; index++) {
             const element = this.tiles[index];
             if (element.rotations > 0) {
                 for (let i = 0; i < element.rotations; i++) {
-                    this.tiles.push(element.rotate(i + 1));
+                    this.tiles.push(element.rotate(i + 1, p5));
                 }
             }
             element.index = index;

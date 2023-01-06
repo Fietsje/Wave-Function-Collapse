@@ -1,4 +1,5 @@
-class Tile {
+
+export class Tile {
 
     constructor(name, nodes, rotations, disallowSelfConnect) {
         this.name = name;
@@ -51,13 +52,13 @@ class Tile {
         }
     }
 
-    rotate(num) {
+    rotate(num, p5) {
         const w = this.image.width;
         const h = this.image.height;
-        const newImg = createGraphics(w, h);
-        newImg.imageMode(CENTER);
+        const newImg = p5.createGraphics(w, h);
+        newImg.imageMode(p5.CENTER);
         newImg.translate(w / 2, h / 2);
-        newImg.rotate(HALF_PI * num);
+        newImg.rotate(p5.HALF_PI * num);
         newImg.image(this.image, 0, 0);
 
         const newNodes = [];

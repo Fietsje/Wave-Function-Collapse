@@ -1,13 +1,16 @@
-class Grid {
+import { Cell } from "./cell.js";
+
+export class Grid {
     tileSetData = null;
     sortFunction = null;
 
-    constructor(width, height, size) {
+    constructor(width, height, size, p5cfg) {
         this.cells = [];
         this.width = width;
         this.height = height;
         this.size = size;
         this.options = [];
+        this.p5 = p5cfg;
     }
 
     sortAscending() { this.sortFunction = this.sortItemsAscending; }
@@ -39,7 +42,7 @@ class Grid {
     initialize(tileSet) {
         this.tileSetData = tileSet
         this.options = tileSet.tiles.map(x => x.index);
-        this.cells = Array.from({ length: (Math.ceil(this.width / this.size) * Math.ceil(this.height / this.size)) }, (e, idx) => new Cell(this.options));
+        this.cells = Array.from({ length: (Math.ceil(this.width / this.size) * Math.ceil(this.height / this.size)) }, (e, idx) => new Cell(this.options, this.p5));
         let row = 0;
         let column = 0;
         let dimensions = this.width / this.size;
@@ -108,7 +111,7 @@ class Grid {
         }
     }
 
-    setRandomCell(pickRandomItem) {
+    setRandomCell(pickRandomItem, p5) {
         const copy = this.cells.filter(x => !x.isCollapsed);
 
         if (copy.length === 0) {
@@ -116,7 +119,7 @@ class Grid {
         }
 
         if (copy.length <= 1) {
-            noLoop();
+            p5.noLoop();
         }
 
         if (this.sortFunction) { copy.sort(this.sortFunction); }
